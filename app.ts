@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 //cors ==> cross origin resource sharing
 app.use(cors({
-    origin: ['https://ute-elearning-client-ezwulz3kj-hoang-le-tien-dats-projects.vercel.app'],
+    origin: ["https://ute-elearning-client.vercel.app"],
     credentials: true,
 }));
 

@@ -23,7 +23,7 @@ exports.app.use(express_1.default.json({ limit: "50mb" }));
 exports.app.use((0, cookie_parser_1.default)());
 //cors ==> cross origin resource sharing
 exports.app.use((0, cors_1.default)({
-    origin: ['https://ute-elearning-client-ezwulz3kj-hoang-le-tien-dats-projects.vercel.app'],
+    origin: ["https://ute-elearning-client.vercel.app"],
     credentials: true,
 }));
 const limiter = (0, express_rate_limit_1.rateLimit)({
