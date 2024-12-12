@@ -9,7 +9,6 @@ export const CreateCourse  = CatchAsyncError(async(data:any,res:Response)=>{
         course
     });
 })
-
 //Get all courses
 export const getAllcoursesService = async (res: Response) => {
     const courses = await CourseModel.find().sort({createdAt: -1});
@@ -19,7 +18,6 @@ export const getAllcoursesService = async (res: Response) => {
         courses,
     });
 };
-
 export const getCoursesByLecturerId = async (res: Response, lecturerId: string) => {
     try {
         const courses = await CourseModel.find({ 'lecturer._id': lecturerId }).sort({ createdAt: -1 });
