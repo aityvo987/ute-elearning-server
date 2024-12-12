@@ -9,7 +9,9 @@
 /coverage
 
 # production
-/build
+#/build
+
+/ute-elearning
 
 # misc
 .DS_Store
