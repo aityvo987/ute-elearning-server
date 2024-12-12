@@ -11,13 +11,15 @@ exports.accessTokenOptions = {
     expires: new Date(Date.now() + accessTokenExpire * 60 * 1000),
     maxAge: accessTokenExpire * 60 * 1000,
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: "none",
+    secure: true,
 };
 exports.refreshTokenOptions = {
     expires: new Date(Date.now() + refreshTokenExpire * 24 * 60 * 60 * 1000),
     maxAge: refreshTokenExpire * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: "none",
+    secure: true,
 };
 const sendToken = (user, statusCode, res) => {
     const accessToken = user.SignAccessToken();
@@ -28,10 +30,6 @@ const sendToken = (user, statusCode, res) => {
         console.error('Redis SET Error:', err);
         // Bạn có thể xử lý lỗi Redis tại đây nếu cần
     });
-    // only set secure to true in production. It will be set again when deploying
-    if (process.env.NODE_ENV !== 'production') {
-        exports.accessTokenOptions.secure = false;
-    }
     //set cookie
     res.cookie("access_token", accessToken, exports.accessTokenOptions);
     res.cookie("refresh_token", refreshToken, exports.refreshTokenOptions);
