@@ -240,7 +240,7 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
 
         if (req.user?._id === question.user._id) {
             await NotificationModel.create({
-                user: req.user?._id,
+                userId: req.user?._id,
                 title: "New Question Reply",
                 message: `You have a new question reply in ${courseContent.title}`,
             });
