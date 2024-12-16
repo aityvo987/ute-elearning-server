@@ -152,7 +152,7 @@ exports.addQuestion = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, n
         };
         courseContent.questions.push(newQuestion);
         await notification_model_1.default.create({
-            user: req.user?._id,
+            userId: course?.lecturer._id,
             title: "New Question",
             message: `You have a new question in ${courseContent.title}`,
         });
@@ -191,7 +191,7 @@ exports.addAnswer = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, nex
         await course?.save();
         if (req.user?._id === question.user._id) {
             await notification_model_1.default.create({
-                user: req.user?._id,
+                userId: req.user?._id,
                 title: "New Question Reply",
                 message: `You have a new question reply in ${courseContent.title}`,
             });
