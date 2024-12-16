@@ -48,10 +48,6 @@ exports.createOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, n
         };
         //create mailData to fetch data to the email user after success purchasing
         const mailData = {
-            // user: {
-            //     name: user?.name,
-            // },
-            //order object 
             order: {
                 _id: course._id.toString().slice(0, 6), //error   _id: course._id.slice(0, 6),
                 name: course.name,
@@ -59,9 +55,7 @@ exports.createOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, n
                 //order Date: type===> 2014 September 29
                 date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
             },
-            // ORIGIN: process.env.ORIGIN,
         };
-        //fetch emailData to user mail
         const html = await ejs_1.default.renderFile(path_1.default.join(__dirname, '../mails/order-confirmmation.ejs'), { order: mailData });
         try {
             //if user still exists
@@ -113,6 +107,9 @@ exports.createCartOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, re
             }
         }
         const user = await user_model_1.default.findById(req.user?._id);
+        const mailData = {
+            orders: []
+        };
         for (const courseId of courseIds) {
             const courseExistInUser = user?.courses.some((course) => course._id.toString() === courseId);
             if (courseExistInUser) {
@@ -122,6 +119,12 @@ exports.createCartOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, re
             if (!course) {
                 return next(new ErrorHandler_1.default(`Course with ID ${courseId} not found`, 404));
             }
+            mailData.orders.push({
+                _id: course._id.toString().slice(0, 6),
+                name: course.name,
+                price: course.price,
+                date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            });
             user?.courses.push(course?._id);
             await notification_model_1.default.create({
                 userId: user?._id,
@@ -130,6 +133,20 @@ exports.createCartOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, re
             });
             course.purchased = (course.purchased ?? 0) + 1;
             await course.save();
+        }
+        const html = await ejs_1.default.renderFile(path_1.default.join(__dirname, '../mails/order-confirmmation.ejs'), { order: mailData });
+        try {
+            if (user) {
+                await (0, sendMail_1.default)({
+                    email: user.email,
+                    subject: "Order Confirmation",
+                    template: "order-confirmmation.ejs",
+                    data: mailData,
+                });
+            }
+        }
+        catch (err) {
+            return next(new ErrorHandler_1.default(err.message, 500));
         }
         const data = {
             courseIds: courseIds,
