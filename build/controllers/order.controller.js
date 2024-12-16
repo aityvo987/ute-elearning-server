@@ -134,18 +134,29 @@ exports.createCartOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, re
             course.purchased = (course.purchased ?? 0) + 1;
             await course.save();
         }
-        const html = await ejs_1.default.renderFile(path_1.default.join(__dirname, '../mails/order-confirmmation.ejs'), { order: mailData });
+        try {
+            console.log("MailData", mailData);
+            const html = await ejs_1.default.renderFile(path_1.default.join(__dirname, '../mails/order-confirmmation.ejs'), { order: mailData });
+            console.log("MailData 1", { order: mailData });
+        }
+        catch (err) {
+            console.log("Error Email Creating:", err);
+            return next(new ErrorHandler_1.default(err.message, 500));
+        }
         try {
             if (user) {
+                let data = { order: mailData };
                 await (0, sendMail_1.default)({
                     email: user.email,
                     subject: "Order Confirmation",
                     template: "order-confirmmation.ejs",
-                    data: mailData,
+                    data,
                 });
+                console.log("MailData 2", data);
             }
         }
         catch (err) {
+            console.log("Error Email:", err);
             return next(new ErrorHandler_1.default(err.message, 500));
         }
         const data = {

@@ -163,21 +163,32 @@ export const createCartOrder = CatchAsyncError(async (req: Request, res: Respons
             await course.save();
         }
         
-        const html = await ejs.renderFile(
-            path.join(__dirname, '../mails/order-confirmmation.ejs'),
-            { order: mailData }
-        );
+        try{
+            console.log("MailData",mailData);
+            const html = await ejs.renderFile(
+                path.join(__dirname, '../mails/order-confirmmation.ejs'),
+                { order: mailData }
+            );
+            console.log("MailData 1",{ order: mailData });
+        }catch (err:any) {
+            console.log("Error Email Creating:",err);
+            return next(new ErrorHandler(err.message, 500));
+        }
+        
         
         try {
             if (user) {
+                let data={ order: mailData }
                 await sendMail({
                     email: user.email,
                     subject: "Order Confirmation",
                     template: "order-confirmmation.ejs",
-                    data: mailData,
+                    data,
                 });
+                console.log("MailData 2",data);
             }
         } catch (err:any) {
+            console.log("Error Email:",err);
             return next(new ErrorHandler(err.message, 500));
         }
 
