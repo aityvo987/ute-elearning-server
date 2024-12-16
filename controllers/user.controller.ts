@@ -45,7 +45,7 @@ export const registrationUser = CatchAsyncError(async (req: Request, res: Respon
         const html = await ejs.renderFile(path.join(__dirname, "../mails/activation-mail.ejs"), data);
 
         try {
-            console.log(`User is connecting: ${user.email}`);
+            
             await sendMail({
                 email: user.email,
                 subject: "Activate your account",

@@ -97,34 +97,48 @@
             <p>Thank you for purchasing our course. We're excited to have you on board! Below are the details of your
                 order:</p>
             <div class="content">
-             
-                <p>Thank you for purchasing our course. We're excited to have you on board! Below are the details of
-                    your order:</p>
-                <table class="order-details">
-                    <tr>
-                        <th>Order ID</th>
-                        <td>
-                            <%= order._id %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Course Name</th>
-                        <td>
-                            <%= order.name %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td>$<%= order.price %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Order Date</th>
-                        <td>
-                            <%= order.date %>
-                        </td>
-                    </tr>
-                </table>
+                <% if (Array.isArray(order)) { %>
+                    <% order.forEach(function(orderItem) { %>
+                        <p>Thank you for purchasing our course. We're excited to have you on board! Below are the details of your order:</p>
+                        <table class="order-details">
+                            <tr>
+                                <th>Order ID</th>
+                                <td><%= orderItem._id %></td>
+                            </tr>
+                            <tr>
+                                <th>Course Name</th>
+                                <td><%= orderItem.name %></td>
+                            </tr>
+                            <tr>
+                                <th>Price</th>
+                                <td>$<%= orderItem.price %></td>
+                            </tr>
+                            <tr>
+                                <th>Order Date</th>
+                                <td><%= orderItem.date %></td>
+                            </tr>
+                        </table>
+                    <% }); %>
+                <% } else { %>
+                    <table class="order-details">
+                        <tr>
+                            <th>Order ID</th>
+                            <td><%= order._id %></td>
+                        </tr>
+                        <tr>
+                            <th>Course Name</th>
+                            <td><%= order.name %></td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>$<%= order.price %></td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td><%= order.date %></td>
+                        </tr>
+                    </table>
+                <% } %}
 
                 <p>You can access your course anytime by logging into your account.</p>
             </div>
@@ -135,6 +149,7 @@
                 <p>&copy; <%= new Date().getFullYear() %> UTEDEMY. All rights reserved.</p>
             </div>
         </div>
+    </div>
 </body>
 
 </html>
