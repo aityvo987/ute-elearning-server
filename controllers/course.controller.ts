@@ -183,7 +183,7 @@ export const addQuestion = CatchAsyncError(async (req: Request, res: Response, n
         courseContent.questions.push(newQuestion);
 
         await NotificationModel.create({
-            user: req.user?._id,
+            user: course?.lecturer._id,
             title: "New Question",
             message: `You have a new question in ${courseContent.title}`,
         });
