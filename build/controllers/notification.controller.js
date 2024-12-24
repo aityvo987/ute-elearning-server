@@ -12,20 +12,24 @@ const node_cron_1 = __importDefault(require("node-cron"));
 //get all notifications
 exports.getNotifications = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, next) => {
     try {
+        console.log("Checking notification");
         const user = req.user;
         const notifications = await notification_model_1.default.find({ userId: user._id }).sort({ createdAt: -1 });
+        console.log("Checking notification", notifications);
         res.status(201).json({
             success: true,
             notifications,
         });
     }
     catch (err) {
+        console.log("Notification error");
         return next(new ErrorHandler_1.default(err.message, 500));
     }
 });
 //update notification status
 exports.updateNotificationStatus = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, next) => {
     try {
+        console.log("Updating notification");
         const notification = await notification_model_1.default.findById(req.params.id);
         if (!notification) {
             return next(new ErrorHandler_1.default("Notification not found", 404));
@@ -42,6 +46,7 @@ exports.updateNotificationStatus = (0, catchAsyncErrors_1.CatchAsyncError)(async
         });
     }
     catch (err) {
+        console.log("Error notification", err.message);
         return next(new ErrorHandler_1.default(err.message, 500));
     }
 });

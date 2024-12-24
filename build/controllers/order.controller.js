@@ -126,18 +126,22 @@ exports.createCartOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, re
                 date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
             });
             user?.courses.push(course?._id);
-            await notification_model_1.default.create({
-                userId: user?._id,
-                title: "New Order",
-                message: `You have new order: ${course?.name}`,
-            });
+            try {
+                console.log("Creating notification 1");
+                await notification_model_1.default.create({
+                    userId: course.lecturer?._id,
+                    title: "New Order",
+                    message: `You have new order: ${course?.name}`,
+                });
+            }
+            catch (err) {
+                return next(new ErrorHandler_1.default(err.message, 500));
+            }
             course.purchased = (course.purchased ?? 0) + 1;
             await course.save();
         }
         try {
-            console.log("MailData", mailData);
             const html = await ejs_1.default.renderFile(path_1.default.join(__dirname, '../mails/order-confirmmation.ejs'), { order: mailData });
-            console.log("MailData 1", { order: mailData });
         }
         catch (err) {
             console.log("Error Email Creating:", err);

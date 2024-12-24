@@ -248,15 +248,15 @@ exports.addReview = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, nex
         }
         await course?.save();
         await redis_1.redis.set(courseId, JSON.stringify(course), 'EX', 604800);
-        // if (course){
-        //     if(course.lecturer){
-        //         await NotificationModel.create({
-        //             user: course.lecturer._id,
-        //             title: "New Review Received",
-        //             message: `${req.user?.name} has given a review on your course: ${course?.name}`,
-        //         });
-        //     }
-        // }
+        if (course) {
+            if (course.lecturer) {
+                await notification_model_1.default.create({
+                    user: course.lecturer._id,
+                    title: "New Review Received",
+                    message: `${req.user?.name} has given a review on your course: ${course?.name}`,
+                });
+            }
+        }
         res.status(200).json({
             success: true,
             course,
