@@ -309,18 +309,15 @@ export const addReview = CatchAsyncError(async (req: Request, res: Response, nex
 
         await redis.set(courseId, JSON.stringify(course), 'EX', 604800)
 
-        // if (course){
-        //     if(course.lecturer){
-        //         await NotificationModel.create({
-        //             user: course.lecturer._id,
-        //             title: "New Review Received",
-        //             message: `${req.user?.name} has given a review on your course: ${course?.name}`,
-        //         });
-        //     }
-        // }
-
-        
-
+        if (course){
+            if(course.lecturer){
+                await NotificationModel.create({
+                    user: course.lecturer._id,
+                    title: "New Review Received",
+                    message: `${req.user?.name} has given a review on your course: ${course?.name}`,
+                });
+            }
+        }
 
         res.status(200).json({
             success: true,

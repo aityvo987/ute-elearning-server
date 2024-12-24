@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 //cors ==> cross origin resource sharing
 app.use(cors({
-    origin: ["https://ute-elearning-client.vercel.app"],
+    origin: ["https://ute-elearning-client.vercel.app","http://localhost:3000"],
     credentials: true,
 }));
 

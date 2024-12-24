@@ -9,9 +9,10 @@ import cron from "node-cron"
 //get all notifications
 export const getNotifications = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log("Checking notification");
         const user = req.user;
         const notifications = await NotificationModel.find({ userId: user._id }).sort({ createdAt: -1 });
-
+        console.log("Checking notification",notifications);
         res.status(201).json({
             success: true,
             notifications,
@@ -19,6 +20,7 @@ export const getNotifications = CatchAsyncError(async (req: Request, res: Respon
 
 
     } catch (err: any) {
+        console.log("Notification error");
         return next(new ErrorHandler(err.message, 500));
     }
 });
@@ -26,6 +28,7 @@ export const getNotifications = CatchAsyncError(async (req: Request, res: Respon
 //update notification status
 export const updateNotificationStatus = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log("Updating notification")
         const notification = await NotificationModel.findById(req.params.id);
 
         if (!notification) {
@@ -45,6 +48,7 @@ export const updateNotificationStatus = CatchAsyncError(async (req: Request, res
         });
 
     } catch (err: any) {
+        console.log("Error notification",err.message)
         return next(new ErrorHandler(err.message, 500));
     }
 });

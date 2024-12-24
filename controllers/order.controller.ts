@@ -153,23 +153,25 @@ export const createCartOrder = CatchAsyncError(async (req: Request, res: Respons
 
             user?.courses.push(course?._id);
 
-            await NotificationModel.create({
-                userId: user?._id,
-                title: "New Order",
-                message: `You have new order: ${course?.name}`,
-            });
-
+            try{
+                console.log("Creating notification 1");
+                await NotificationModel.create({
+                    userId: course.lecturer?._id,
+                    title: "New Order",
+                    message: `You have new order: ${course?.name}`,
+                });
+            }catch (err:any) {
+                return next(new ErrorHandler(err.message, 500));
+            }
             course.purchased = (course.purchased ?? 0) + 1;
             await course.save();
         }
         
         try{
-            console.log("MailData",mailData);
             const html = await ejs.renderFile(
                 path.join(__dirname, '../mails/order-confirmmation.ejs'),
                 { order: mailData }
             );
-            console.log("MailData 1",{ order: mailData });
         }catch (err:any) {
             console.log("Error Email Creating:",err);
             return next(new ErrorHandler(err.message, 500));
