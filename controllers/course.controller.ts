@@ -312,7 +312,7 @@ export const addReview = CatchAsyncError(async (req: Request, res: Response, nex
         if (course){
             if(course.lecturer){
                 await NotificationModel.create({
-                    user: course.lecturer._id,
+                    userId: course.lecturer._id,
                     title: "New Review Received",
                     message: `${req.user?.name} has given a review on your course: ${course?.name}`,
                 });

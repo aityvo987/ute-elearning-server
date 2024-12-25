@@ -251,7 +251,7 @@ exports.addReview = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, nex
         if (course) {
             if (course.lecturer) {
                 await notification_model_1.default.create({
-                    user: course.lecturer._id,
+                    userId: course.lecturer._id,
                     title: "New Review Received",
                     message: `${req.user?.name} has given a review on your course: ${course?.name}`,
                 });

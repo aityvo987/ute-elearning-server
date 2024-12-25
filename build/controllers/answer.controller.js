@@ -46,7 +46,7 @@ exports.addQuizzAnswer = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res
         };
         const studentAnswer = await answer_model_1.default.create(newAnswer);
         await notification_model_1.default.create({
-            user: course?.lecturer,
+            userId: course?.lecturer,
             title: "New Submission",
             message: `You have a new submitted answer in ${courseContent.title}`,
         });
