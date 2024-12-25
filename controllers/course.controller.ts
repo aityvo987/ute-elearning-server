@@ -139,7 +139,7 @@ export const getCourseContent = CatchAsyncError(async (req: Request, res: Respon
         const courseId = req.params.id;
         const courseExists = userCourseList?.find((course: any) => course._id.toString() === courseId);
 
-        if (!courseExists) {
+        if (!courseExists&&req.user.role!=="lecturer") {
             return next(new ErrorHandler("You have not paid for full content of the course", 404));
         }
 
